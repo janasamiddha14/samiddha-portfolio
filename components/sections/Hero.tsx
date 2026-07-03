@@ -6,7 +6,8 @@ import { Environment } from "@react-three/drei";
 import gsap from "gsap";
 import { personalInfo } from "@/data/content";
 import {
-  BlackHoleCore,
+  NeutronStarCore,
+  PulsarJets,
   AccretionDisk,
   GravitationalLensRing,
   StarField,
@@ -63,7 +64,8 @@ export default function Hero() {
           <ambientLight intensity={0.2} />
           
           <group position={[0, 0, 0]}>
-            <BlackHoleCore />
+            <NeutronStarCore />
+            <PulsarJets />
             <AccretionDisk />
             <GravitationalLensRing />
             <SpaceDust />

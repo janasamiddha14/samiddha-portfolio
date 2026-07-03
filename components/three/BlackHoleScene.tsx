@@ -153,30 +153,91 @@ export function AccretionDisk() {
   });
 
   return (
-    <mesh ref={ref} rotation={[Math.PI / 2.2, 0, 0]} material={diskMaterial}>
-      <torusGeometry args={[2.2, 0.9, 2, 120]} />
+    // Tilt the disk and spin it extremely fast
+    <mesh ref={ref} rotation={[Math.PI / 2.3, 0, 0]} material={diskMaterial}>
+      <torusGeometry args={[2.5, 1.0, 2, 120]} />
     </mesh>
   );
 }
 
 /**
- * BlackHoleCore — The event horizon (pure darkness)
+ * NeutronStarCore — Blindingly bright core of the neutron star
  */
-export function BlackHoleCore() {
+export function NeutronStarCore() {
   const ref = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      // Very subtle scale pulsation — like Hawking radiation flickers
-      const pulse = 1 + Math.sin(clock.getElapsedTime() * 0.5) * 0.01;
+      // Fast pulsation for a neutron star
+      const pulse = 1 + Math.sin(clock.getElapsedTime() * 15.0) * 0.02;
       ref.current.scale.setScalar(pulse);
     }
   });
 
   return (
     <mesh ref={ref}>
-      <sphereGeometry args={[1, 64, 64]} />
-      <meshBasicMaterial color="#000000" />
+      <sphereGeometry args={[1.05, 64, 64]} />
+      {/* Bright blue-white core */}
+      <meshBasicMaterial color="#e0f7fa" />
+    </mesh>
+  );
+}
+
+/**
+ * PulsarJets — Intense beams of radiation from the magnetic poles
+ */
+export function PulsarJets() {
+  const ref = useRef<THREE.Mesh>(null);
+  
+  const jetMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 },
+        color: { value: new THREE.Color(0x00ffff) },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float time;
+        uniform vec3 color;
+        varying vec2 vUv;
+        
+        void main() {
+          // Fade out towards the ends (y-axis)
+          float fade = sin(vUv.y * 3.14159);
+          // Pulsing intensity
+          float pulse = 0.5 + 0.5 * sin(time * 20.0 + vUv.y * 10.0);
+          // Core of the beam is brighter
+          float core = smoothstep(0.5, 0.4, abs(vUv.x - 0.5));
+          
+          float alpha = fade * pulse * core;
+          gl_FragColor = vec4(color, alpha * 0.8);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+    });
+  }, []);
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      jetMaterial.uniforms.time.value = clock.getElapsedTime();
+      // Fast rotation matching the star
+      ref.current.rotation.y = clock.getElapsedTime() * 5.0;
+    }
+  });
+
+  return (
+    <mesh ref={ref}>
+      <cylinderGeometry args={[0.2, 1.5, 12, 32, 1, true]} />
+      <primitive object={jetMaterial} attach="material" />
     </mesh>
   );
 }
@@ -234,7 +295,8 @@ export function GravitationalLensRing() {
 
   return (
     <mesh ref={ref} material={lensShader}>
-      <planeGeometry args={[3.2, 3.2]} />
+      {/* Slightly larger plane for the intense neutron star glow */}
+      <planeGeometry args={[4.5, 4.5]} />
     </mesh>
   );
 }
