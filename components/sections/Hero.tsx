@@ -63,9 +63,7 @@ export default function Hero() {
           <ambientLight intensity={0.2} />
           
           <group position={[0, 0, 0]}>
-            <BlackHoleCore />
             <AccretionDisk />
-            <GravitationalLensRing />
             <SpaceDust />
           </group>
           
