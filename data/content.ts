@@ -144,22 +144,10 @@ export const achievements = [
 
 export const projects = [
   {
-    title: "Quantum Circuit Simulation (VQE)",
-    description: "Simulating physical and molecular systems using Variational Quantum Eigensolver.",
-    status: "Exploratory",
-    tags: ["Quantum Computing", "Python"],
-  },
-  {
     title: "MoS₂ Photodetector Research",
     description: "Investigating 2D materials for advanced optoelectronic applications.",
     status: "Ongoing",
     tags: ["Condensed Matter", "Photonics"],
-  },
-  {
-    title: "Spacetime Curvature Modeling",
-    description: "Mathematical modeling of gravitational lensing near massive objects.",
-    status: "Planned",
-    tags: ["General Relativity", "Mathematics"],
   }
 ];
 
