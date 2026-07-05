@@ -53,11 +53,11 @@ export default function Hero() {
   return (
     <div ref={containerRef} className="relative h-screen w-full overflow-hidden bg-space-black">
       {/* 3D Canvas Background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <Canvas
           camera={{ position: [0, 2, 8], fov: 45 }}
-          dpr={[1, 2]} // Performance optimization
-          gl={{ antialias: false, powerPreference: "high-performance" }} // Optimized for 120fps
+          dpr={1} // Cap pixel ratio to 1 for butter-fluidic mobile performance
+          gl={{ antialias: false, powerPreference: "high-performance" }}
         >
           <color attach="background" args={["#050608"]} />
           <ambientLight intensity={0.2} />
