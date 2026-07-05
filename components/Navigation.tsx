@@ -117,15 +117,6 @@ export default function Navigation() {
             })}
           </ul>
 
-          {/* CV Button (desktop) */}
-          <a
-            href="/samiddha-jana-cv.pdf"
-            download
-            className="btn-ghost hidden lg:inline-flex text-xs py-2 px-4"
-            aria-label="Download CV"
-          >
-            Download CV
-          </a>
 
           {/* Mobile menu toggle */}
           <button
@@ -168,9 +159,7 @@ export default function Navigation() {
                 </motion.li>
               ))}
             </ul>
-            <a href="/samiddha-jana-cv.pdf" download className="btn-primary w-full justify-center mt-4">
-              Download CV
-            </a>
+
           </motion.div>
         )}
       </AnimatePresence>
