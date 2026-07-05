@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { personalInfo } from "@/data/content";
-import { Mail, Linkedin, Github, ExternalLink, Download } from "lucide-react";
+import { Mail, Linkedin, Send, ExternalLink, Download } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -37,9 +37,9 @@ export default function Contact() {
   }, []);
 
   const links = [
-    { name: "Email", icon: Mail, url: `mailto:${personalInfo.email}` },
-    { name: "LinkedIn", icon: Linkedin, url: personalInfo.linkedin },
-    { name: "GitHub", icon: Github, url: personalInfo.github },
+    { name: personalInfo.email, icon: Mail, url: `mailto:${personalInfo.email}` },
+    { name: "Samiddha Jana", icon: Linkedin, url: personalInfo.linkedin },
+    { name: "@deltensor", icon: Send, url: "https://t.me/deltensor" },
   ];
 
   return (
@@ -66,7 +66,7 @@ export default function Contact() {
           </div>
 
           {/* Social / Academic Links */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-12">
             {links.map((link, index) => {
               const Icon = link.icon;
               return (
