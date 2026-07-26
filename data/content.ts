@@ -3,7 +3,7 @@ export const personalInfo = {
   title: "Theoretical Physics Undergraduate",
   email: "janasamiddha2006@gmail.com",
   phone: "9382703483",
-  linkedin: "https://www.linkedin.com/in/jana-samiddha/",
+  linkedin: "https://www.linkedin.com/in/jana-samiddha-23a8472b3",
   github: "https://github.com", // Placeholder
   googleScholar: "#", // Placeholder
   orcid: "#", // Placeholder
