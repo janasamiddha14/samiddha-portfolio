@@ -162,31 +162,192 @@ export function AccretionDisk() {
 }
 
 /**
- * BlackHoleCore — The event horizon (pure darkness)
+ * NeutronStarCore — Blindingly bright core of the neutron star
  */
-export function BlackHoleCore() {
+export function NeutronStarCore() {
   const ref = useRef<THREE.Mesh>(null);
+
+  const coreShader = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          time: { value: 0 },
+          baseColor: { value: new THREE.Color(0xdffff) }, // Blinding bright blue-white
+          pulseColor: { value: new THREE.Color(0x3fa9ff) }, // Electric blue
+        },
+        vertexShader: `
+          varying vec3 vNormal;
+          varying vec3 vPositionNormal;
+          void main() {
+            vNormal = normalize(normalMatrix * normal); // Normal in view space
+            vPositionNormal = normalize((modelViewMatrix * vec4(position, 1.0)).xyz);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform float time;
+          uniform vec3 baseColor;
+          uniform vec3 pulseColor;
+          varying vec3 vNormal;
+          varying vec3 vPositionNormal;
+
+          void main() {
+            // Fresnel effect for edge glow
+            float fresnel = dot(vNormal, vPositionNormal);
+            fresnel = clamp(1.0 - fresnel, 0.0, 1.0);
+            fresnel = pow(fresnel, 2.0);
+
+            // Pulsating energy
+            float pulse = sin(time * 15.0) * 0.5 + 0.5;
+            
+            vec3 finalColor = mix(baseColor, pulseColor, fresnel * pulse);
+            
+            gl_FragColor = vec4(finalColor, 1.0);
+          }
+        `,
+      }),
+    []
+  );
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      // Subtle pulsation
-      const pulse = 1 + Math.sin(clock.getElapsedTime() * 0.5) * 0.01;
-      ref.current.scale.setScalar(pulse);
+      coreShader.uniforms.time.value = clock.getElapsedTime();
+      const scale = 1.0 + Math.sin(clock.getElapsedTime() * 20.0) * 0.015;
+      ref.current.scale.setScalar(scale);
     }
   });
 
   return (
-    <mesh ref={ref}>
+    <mesh ref={ref} material={coreShader}>
       <sphereGeometry args={[1.0, 64, 64]} />
-      {/* Pure void black */}
-      <meshBasicMaterial color="#000000" />
     </mesh>
   );
 }
 
-// Removing PulsarJets since Gargantua doesn't have them
+/**
+ * PulsarJets — Intense relativistic jets shooting from the poles
+ */
 export function PulsarJets() {
-  return null;
+  const ref = useRef<THREE.Group>(null);
+
+  const jetShader = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          time: { value: 0 },
+          color: { value: new THREE.Color(0x5ccbff) }, // Nebula glow
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          varying vec3 vPosition;
+          void main() {
+            vUv = uv;
+            vPosition = position;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform float time;
+          uniform vec3 color;
+          varying vec2 vUv;
+          varying vec3 vPosition;
+
+          void main() {
+            // Jet fading away from the core
+            float fade = 1.0 - abs(vPosition.y) / 8.0;
+            fade = clamp(fade, 0.0, 1.0);
+            
+            // Central core of the jet is brighter
+            float centerDist = abs(vPosition.x) + abs(vPosition.z);
+            float coreGlow = smoothstep(0.4, 0.0, centerDist);
+            
+            // Rapid pulsation
+            float pulse = 0.7 + 0.3 * sin(vPosition.y * 5.0 - time * 30.0);
+            
+            float alpha = fade * coreGlow * pulse;
+            gl_FragColor = vec4(color, alpha);
+          }
+        `,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      }),
+    []
+  );
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      jetShader.uniforms.time.value = clock.getElapsedTime();
+      // Rapid spinning of the jets
+      ref.current.rotation.y = clock.getElapsedTime() * 5.0;
+    }
+  });
+
+  return (
+    <group ref={ref} rotation={[0, 0, Math.PI / 12]}> {/* Tilt the magnetic axis */}
+      {/* Top Jet */}
+      <mesh position={[0, 4, 0]} material={jetShader}>
+        <cylinderGeometry args={[0.01, 1.2, 8, 32, 1, true]} />
+      </mesh>
+      {/* Bottom Jet */}
+      <mesh position={[0, -4, 0]} material={jetShader}>
+        <cylinderGeometry args={[1.2, 0.01, 8, 32, 1, true]} />
+      </mesh>
+    </group>
+  );
+}
+
+/**
+ * MagneticFieldLines — Glowing sweeping arcs around the pulsar
+ */
+export function MagneticFieldLines() {
+  const ref = useRef<THREE.Group>(null);
+  
+  // Create static arcs representing field lines
+  const lines = useMemo(() => {
+    const lineCount = 12;
+    const items = [];
+    for (let i = 0; i < lineCount; i++) {
+      const angle = (i / lineCount) * Math.PI * 2;
+      const points = [];
+      // Create a semi-circle arc
+      for (let j = 0; j <= 20; j++) {
+        const t = j / 20;
+        const theta = t * Math.PI; // 0 to PI
+        const radius = 2.5 + Math.sin(theta) * 2.0; // Bulge outwards
+        const y = Math.cos(theta) * 3.5;
+        const x = Math.sin(theta) * radius * Math.cos(angle);
+        const z = Math.sin(theta) * radius * Math.sin(angle);
+        points.push(new THREE.Vector3(x, y, z));
+      }
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      items.push(geometry);
+    }
+    return items;
+  }, []);
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      // Rotate the entire magnetic field rapidly with the jets
+      ref.current.rotation.y = clock.getElapsedTime() * 5.0;
+      // Pulse opacity
+      ref.current.children.forEach((child, i) => {
+        const mat = (child as THREE.Line).material as THREE.LineBasicMaterial;
+        mat.opacity = 0.2 + 0.3 * Math.sin(clock.getElapsedTime() * 10.0 + i);
+      });
+    }
+  });
+
+  return (
+    <group ref={ref} rotation={[0, 0, Math.PI / 12]}>
+      {lines.map((geom, idx) => (
+        <line key={idx} geometry={geom}>
+          <lineBasicMaterial color="#3fa9ff" transparent opacity={0.3} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </line>
+      ))}
+    </group>
+  );
 }
 
 /**
