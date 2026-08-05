@@ -6,9 +6,6 @@ import { Environment } from "@react-three/drei";
 import gsap from "gsap";
 import { personalInfo } from "@/data/content";
 import {
-  NeutronStarCore,
-  PulsarJets,
-  MagneticFieldLines,
   StarField,
   ShootingStar,
   SpaceDust
