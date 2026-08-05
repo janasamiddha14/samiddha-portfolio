@@ -59,11 +59,6 @@ export default function About() {
               I enjoy connecting the abstract beauty of mathematics with the physical nature of reality, firmly believing that physics is humanity's deepest attempt to understand existence.
             </p>
 
-            <div className="pt-6 flex flex-wrap gap-4">
-              <a href={personalInfo.cvLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Download Curriculum Vitae
-              </a>
-            </div>
           </div>
         </div>
       </div>
