@@ -308,6 +308,7 @@ export function MagneticFieldLines() {
   const lines = useMemo(() => {
     const lineCount = 12;
     const items = [];
+    const material = new THREE.LineBasicMaterial({ color: "#3fa9ff", transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending, depthWrite: false });
     for (let i = 0; i < lineCount; i++) {
       const angle = (i / lineCount) * Math.PI * 2;
       const points = [];
@@ -322,7 +323,7 @@ export function MagneticFieldLines() {
         points.push(new THREE.Vector3(x, y, z));
       }
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      items.push(geometry);
+      items.push(new THREE.Line(geometry, material));
     }
     return items;
   }, []);
@@ -333,18 +334,18 @@ export function MagneticFieldLines() {
       ref.current.rotation.y = clock.getElapsedTime() * 5.0;
       // Pulse opacity
       ref.current.children.forEach((child, i) => {
-        const mat = (child as THREE.Line).material as THREE.LineBasicMaterial;
-        mat.opacity = 0.2 + 0.3 * Math.sin(clock.getElapsedTime() * 10.0 + i);
+        if ((child as THREE.Line).isLine) {
+          const mat = (child as THREE.Line).material as THREE.LineBasicMaterial;
+          mat.opacity = 0.2 + 0.3 * Math.sin(clock.getElapsedTime() * 10.0 + i);
+        }
       });
     }
   });
 
   return (
     <group ref={ref} rotation={[0, 0, Math.PI / 12]}>
-      {lines.map((geom, idx) => (
-        <line key={idx} geometry={geom}>
-          <lineBasicMaterial color="#3fa9ff" transparent opacity={0.3} blending={THREE.AdditiveBlending} depthWrite={false} />
-        </line>
+      {lines.map((line, idx) => (
+        <primitive key={idx} object={line} />
       ))}
     </group>
   );
