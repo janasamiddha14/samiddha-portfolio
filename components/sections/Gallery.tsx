@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -35,10 +36,10 @@ export default function Gallery() {
   }, []);
 
   const photos = [
-    { label: "Professional Portrait", ratio: "aspect-square" },
-    { label: "Research Laboratory", ratio: "aspect-video" },
-    { label: "Conference Presentation", ratio: "aspect-square" },
-    { label: "Scientific Event", ratio: "aspect-video" },
+    { src: "/gallery_1.jpg", label: "Beach Side", ratio: "aspect-square" },
+    { src: "", label: "Research Laboratory", ratio: "aspect-video" },
+    { src: "", label: "Conference Presentation", ratio: "aspect-square" },
+    { src: "", label: "Scientific Event", ratio: "aspect-video" },
   ];
 
   return (
@@ -54,10 +55,19 @@ export default function Gallery() {
               className={`glass-card overflow-hidden group cursor-pointer ${photo.ratio}`}
             >
               <div className="w-full h-full bg-gradient-to-br from-[#08152F] to-[#050608] flex items-center justify-center relative">
-                <div className="text-text-muted font-mono text-sm opacity-50 z-10">{photo.label} Placeholder</div>
+                {photo.src ? (
+                  <Image 
+                    src={photo.src} 
+                    alt={photo.label} 
+                    fill 
+                    className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" 
+                  />
+                ) : (
+                  <div className="text-text-muted font-mono text-sm opacity-50 z-10">{photo.label} Placeholder</div>
+                )}
                 
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-electric-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+                <div className="absolute inset-0 bg-electric-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none" />
                 
                 {/* Decorative border */}
                 <div className="absolute inset-4 border border-white/5 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 rounded-lg pointer-events-none" />
