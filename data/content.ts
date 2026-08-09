@@ -28,14 +28,6 @@ export const researchInterests = [
   {
     title: "Condensed Matter Physics",
     description: "Theoretical approaches to understanding collective behavior and emergent phenomena in complex materials.",
-  },
-  {
-    title: "Quantum Field Theory",
-    description: "Applying QFT framework to particle physics and condensed matter systems.",
-  },
-  {
-    title: "General Relativity",
-    description: "Understanding spacetime curvature, gravitational lensing, and physics of the event horizon.",
   }
 ];
 
@@ -62,22 +54,22 @@ export const education = [
 
 export const experience = [
   {
-    role: "Bachelor’s Thesis Project",
-    institution: "IIT Kharagpur – Translational NanoDevices Lab",
-    duration: "Aug 2026 – Jul 2027",
-    description: "Continuing research on MoS₂-based FET phototransistor characterization as a year-long Bachelor’s Thesis Project, building on prior internship findings under Dr. Shaili Sett.",
-  },
-  {
-    role: "Research Intern",
-    institution: "IIT Kharagpur – Translational NanoDevices Lab",
-    duration: "Jun – Jul 2026",
-    description: "Characterized MoS₂-based FET phototransistors via computational analysis under Dr. Shaili Sett, fitting I–V and photocurrent decay data to extract key device parameters.",
+    role: "Bachelor’s Thesis Project (BTP) Student",
+    institution: "IIT Kharagpur – Centre for Interdisciplinary and Convergence Technology",
+    duration: "Aug 2026 – Present",
+    description: "Currently working on MoS₂-based FET phototransistor characterization as a year-long Bachelor’s Thesis Project under Dr. Shaili Sett at the Translational NanoDevices Lab.",
   },
   {
     role: "Gravitation & Cosmology Workshop",
     institution: "P.K. College, Contai (Sponsored by IUCAA, Pune)",
-    duration: "2026",
+    duration: "Aug 6 – Aug 8, 2026",
     description: "Completed a 3-day workshop on Gravitation and Cosmology. Participated in hands-on sessions and talks on Cosmology, Black Holes, Gravitational Waves & Lensing, Dark Matter and Dark Energy.",
+  },
+  {
+    role: "Research Intern",
+    institution: "IIT Kharagpur – Translational NanoDevices Lab",
+    duration: "May – Jul 2026",
+    description: "Completed research internship under Dr. Shaili Sett at the Centre for Interdisciplinary and Convergence Technology, characterizing MoS₂-based FET phototransistors via computational analysis.",
   },
   {
     role: "Winter School Participant",
