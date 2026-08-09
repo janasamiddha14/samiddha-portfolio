@@ -44,17 +44,17 @@ export const education = [
     degree: "B.Sc. in Physics",
     institution: "Midnapore College (Autonomous)",
     duration: "2024 - 2027 (expected)",
-    details: "Current Year: 2nd Year. 3rd sem SGPA: 8.35",
+    details: "Currently in 3rd Year; SGPA: 8.35",
   },
   {
     degree: "Higher Secondary (Class XII)",
-    institution: "West Bengal Board",
+    institution: "West Bengal Board (WBCHSE)",
     duration: "2024",
     details: "Score: 86% overall; Mathematics: 96",
   },
   {
     degree: "Secondary (Class X)",
-    institution: "West Bengal Board",
+    institution: "West Bengal Board (WBBSE)",
     duration: "2022",
     details: "Score: 96% overall; Physical Science: 100, Mathematics: 100",
   }
@@ -62,10 +62,22 @@ export const education = [
 
 export const experience = [
   {
+    role: "Bachelor’s Thesis Project",
+    institution: "IIT Kharagpur – Translational NanoDevices Lab",
+    duration: "Aug 2026 – Jul 2027",
+    description: "Continuing research on MoS₂-based FET phototransistor characterization as a year-long Bachelor’s Thesis Project, building on prior internship findings under Dr. Shaili Sett.",
+  },
+  {
     role: "Research Intern",
-    institution: "IIT Kharagpur",
-    duration: "Current",
-    description: "Working under the guidance of Dr. Shaili Sett in the Centre for Interdisciplinary and Convergence Technology.",
+    institution: "IIT Kharagpur – Translational NanoDevices Lab",
+    duration: "Jun – Jul 2026",
+    description: "Characterized MoS₂-based FET phototransistors via computational analysis under Dr. Shaili Sett, fitting I–V and photocurrent decay data to extract key device parameters.",
+  },
+  {
+    role: "Gravitation & Cosmology Workshop",
+    institution: "P.K. College, Contai (Sponsored by IUCAA, Pune)",
+    duration: "2026",
+    description: "Completed a 3-day workshop on Gravitation and Cosmology. Participated in hands-on sessions and talks on Cosmology, Black Holes, Gravitational Waves & Lensing, Dark Matter and Dark Energy.",
   },
   {
     role: "Winter School Participant",
