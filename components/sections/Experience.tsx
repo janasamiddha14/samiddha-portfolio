@@ -40,12 +40,13 @@ export default function Experience() {
     items.forEach((item, index) => {
       gsap.fromTo(
         item,
-        { opacity: 0, x: index % 2 === 0 ? -50 : 50 },
+        { opacity: 0, x: index % 2 === 0 ? -30 : 30 },
         {
           opacity: 1,
           x: 0,
-          duration: 0.8,
-          ease: "power3.out",
+          duration: 0.7,
+          ease: "power2.out",
+          force3D: true,
           scrollTrigger: {
             trigger: item,
             start: "top 85%",

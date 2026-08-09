@@ -20,16 +20,17 @@ export default function About() {
 
     gsap.fromTo(
       textElements,
-      { opacity: 0, y: 50 },
+      { opacity: 0, y: 30 },
       {
         opacity: 1,
         y: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out",
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 75%",
+          start: "top 80%",
         },
       }
     );

@@ -13,7 +13,7 @@ export function StarField() {
   const meshRef = useRef<THREE.Points>(null);
 
   const { positions, sizes } = useMemo(() => {
-    const count = 2000;
+    const count = 1200;
     const positions = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
 
@@ -417,7 +417,7 @@ export function SpaceDust() {
   const ref = useRef<THREE.Points>(null);
 
   const particles = useMemo(() => {
-    const count = 600;
+    const count = 300;
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;

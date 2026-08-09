@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+
 import gsap from "gsap";
 import { personalInfo } from "@/data/content";
 import {
@@ -66,8 +66,8 @@ export default function Hero() {
           <StarField />
           <ShootingStar />
           
-          {/* Subtle environmental lighting */}
-          <Environment preset="city" environmentIntensity={0.1} />
+          {/* Lightweight point light instead of heavy HDR environment */}
+          <pointLight position={[10, 10, 10]} intensity={0.3} />
         </Canvas>
       </div>
 

@@ -20,16 +20,17 @@ export default function Skills() {
 
     gsap.fromTo(
       categories,
-      { opacity: 0, y: 30 },
+      { opacity: 0, y: 25 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        stagger: 0.15,
+        duration: 0.7,
+        stagger: 0.1,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 75%",
+          start: "top 80%",
         },
       }
     );

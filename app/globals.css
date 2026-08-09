@@ -41,6 +41,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -107,19 +109,21 @@ code, pre, .font-mono {
 
 .glass-card {
   background: var(--color-card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--color-border);
   border-radius: 16px;
   box-shadow: 
     0 4px 24px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .glass-nav {
   background: rgba(5, 6, 8, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -295,7 +299,7 @@ code, pre, .font-mono {
 }
 
 .research-card:hover {
-  transform: translateY(-8px) rotateX(2deg);
+  transform: translateY(-6px);
   box-shadow: 0 20px 60px rgba(63, 169, 255, 0.15);
   border-color: rgba(63, 169, 255, 0.3);
 }
@@ -400,6 +404,14 @@ code, pre, .font-mono {
 @media (max-width: 768px) {
   .section-padding {
     padding: 4rem 0;
+  }
+  .glass-card {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .glass-nav {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
