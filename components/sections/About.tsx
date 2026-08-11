@@ -49,16 +49,21 @@ export default function About() {
             <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-event-horizon/20 rounded-full blur-[100px]" />
             
             <p className="text-xl md:text-2xl font-space text-starlight leading-relaxed">
-              My name is {personalInfo.name}. I am a Physics undergraduate with a profound passion for understanding the Universe from first principles.
+              I am Samiddha Jana, a Physics student, driven by an enduring curiosity about the Universe and the fundamental laws of nature. Physics is not merely a subject I study—it is the subject that dwells in my heart. Since childhood, I have dreamed of exploring the Universe and uncovering the mysteries hidden within it, and physics gave me the opportunity to turn that dream into a lifelong pursuit.
             </p>
             
             <p className="text-lg text-text-secondary leading-relaxed">
-              My dream is to contribute to theoretical high-energy physics, drawing inspiration from the elegant works of Einstein, Dirac, Feynman, Penrose, Hawking, and Weinberg.
+              I carry a deep and genuine love for understanding nature—from the smallest fundamental particles to the vastness of the cosmos. For me, every equation is a language, every phenomenon a question, and every unanswered problem an invitation to explore further.
             </p>
 
-            <p className="text-lg text-text-secondary leading-relaxed">
-              I enjoy connecting the abstract beauty of mathematics with the physical nature of reality, firmly believing that physics is humanity's deepest attempt to understand existence.
-            </p>
+            <blockquote className="border-l-2 border-electric-blue/50 pl-6 py-2 italic">
+              <p className="text-lg text-text-secondary leading-relaxed">
+                &ldquo;The whole of science is nothing more than a refinement of everyday thinking.&rdquo;
+              </p>
+              <footer className="mt-3 font-mono text-sm text-electric-blue/70 not-italic tracking-wide">
+                — Ernest Rutherford
+              </footer>
+            </blockquote>
 
           </div>
         </div>
