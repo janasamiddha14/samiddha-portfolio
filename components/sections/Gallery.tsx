@@ -36,10 +36,8 @@ export default function Gallery() {
   }, []);
 
   const photos = [
-    { src: "/gallery_1.jpg", label: "Beach Side", ratio: "aspect-square" },
-    { src: "", label: "Research Laboratory", ratio: "aspect-video" },
-    { src: "", label: "Conference Presentation", ratio: "aspect-square" },
-    { src: "", label: "Scientific Event", ratio: "aspect-video" },
+    { src: "/gallery_1.jpg", label: "Beach Selfie", ratio: "aspect-[3/4]" },
+    { src: "/gallery_2.jpg", label: "Rocky Shoreline", ratio: "aspect-video" },
   ];
 
   return (
