@@ -38,6 +38,8 @@ export default function Gallery() {
   const photos = [
     { src: "/gallery_1.jpg", label: "Beach Selfie", ratio: "aspect-[3/4]" },
     { src: "/gallery_2.jpg", label: "Rocky Shoreline", ratio: "aspect-video" },
+    { src: "/gallery_3.jpg", label: "Mangrove Wetlands", ratio: "aspect-[3/4]" },
+    { src: "/gallery_4.jpg", label: "Stormy Beach", ratio: "aspect-video" },
   ];
 
   return (
