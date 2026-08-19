@@ -20,16 +20,17 @@ export default function Team() {
 
     gsap.fromTo(
       cards,
-      { opacity: 0, y: 30 },
+      { opacity: 0, y: 25 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        stagger: 0.2,
+        duration: 0.7,
+        stagger: 0.15,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 75%",
+          start: "top 80%",
         },
       }
     );
@@ -41,20 +42,22 @@ export default function Team() {
         <h2 className="section-subtitle">08. Network</h2>
         <h3 className="section-title gradient-text mb-12">People I Work With</h3>
 
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {team.map((person, index) => (
-            <div key={index} className="glass-card overflow-hidden group">
-              {/* Photo Placeholder */}
-              <div className="aspect-[4/3] bg-gradient-to-br from-space-black to-cosmic-navy relative overflow-hidden flex items-center justify-center">
-                <div className="text-text-muted text-sm font-mono opacity-50">Image Placeholder</div>
-                <div className="absolute inset-0 bg-electric-blue/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay" />
-              </div>
+            <div 
+              key={index} 
+              className="glass-card p-6 relative group overflow-hidden hover:border-electric-blue/40 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-electric-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               
-              <div className="p-6">
-                <h4 className="font-space text-lg text-starlight mb-1">{person.name}</h4>
-                <div className="text-electric-blue font-medium text-sm mb-3">{person.designation}</div>
-                <div className="text-text-secondary text-sm mb-1">{person.field}</div>
-                <div className="text-text-muted text-xs font-mono">{person.institution}</div>
+              <div className="relative z-10">
+                <div className="text-electric-blue font-mono text-xs mb-3 opacity-80">{person.designation}</div>
+                <h4 className="font-space text-xl text-starlight mb-2 group-hover:text-electric-blue transition-colors duration-200">{person.name}</h4>
+                <div className="text-text-secondary text-sm mb-3">{person.field}</div>
+                <div className="text-text-muted text-xs font-mono flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-electric-blue/60 inline-block" />
+                  {person.institution}
+                </div>
               </div>
             </div>
           ))}
