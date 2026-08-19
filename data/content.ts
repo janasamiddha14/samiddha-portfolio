@@ -55,7 +55,7 @@ export const education = [
 export const experience = [
   {
     role: "Bachelor’s Thesis Project (BTP) Student",
-    institution: "IIT Kharagpur – Centre for Interdisciplinary and Convergence Technology",
+    institution: "IIT Kharagpur – Centre for Interdisciplinary and Convergent Technologies",
     duration: "Aug 2026 – Present",
     description: "Currently working on MoS₂-based FET phototransistor characterization as a year-long Bachelor’s Thesis Project under Dr. Shaili Sett at the Translational NanoDevices Lab.",
   },
@@ -69,7 +69,7 @@ export const experience = [
     role: "Research Intern",
     institution: "IIT Kharagpur – Translational NanoDevices Lab",
     duration: "May – Jul 2026",
-    description: "Completed research internship under Dr. Shaili Sett at the Centre for Interdisciplinary and Convergence Technology, characterizing MoS₂-based FET phototransistors via computational analysis.",
+    description: "Completed research internship under Dr. Shaili Sett at the Centre for Interdisciplinary and Convergent Technologies, characterizing MoS₂-based FET phototransistors via computational analysis.",
   },
   {
     role: "Winter School Participant",
@@ -159,7 +159,7 @@ export const team = [
   {
     name: "Dr. Shaili Sett",
     designation: "Guide / Mentor",
-    field: "Interdisciplinary and Convergence Technology",
+    field: "Centre for Interdisciplinary and Convergent Technologies",
     institution: "IIT Kharagpur",
     photoUrl: "/placeholder-person.jpg"
   },
