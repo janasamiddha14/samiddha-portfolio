@@ -17,6 +17,7 @@ import Gallery from "@/components/sections/Gallery";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import MouseTrail from "@/components/MouseTrail";
+import { CosmicBackground } from "@/components/three/BlackHoleScene";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -38,12 +39,15 @@ export default function Home() {
       {/* Custom cursor trail */}
       <MouseTrail />
 
+      {/* Global persistent 3D Spacetime & Cosmic Background across all sections */}
+      <CosmicBackground />
+
       {/* Cinematic loading screen */}
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
 
       {/* Main content */}
       <div
-        className={`transition-opacity duration-1000 ${loading ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+        className={`relative z-10 transition-opacity duration-1000 ${loading ? "opacity-0 pointer-events-none" : "opacity-100"}`}
       >
         {/* Floating glass navigation */}
         <Navigation />

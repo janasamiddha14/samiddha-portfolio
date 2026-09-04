@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useMemo, useEffect } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 /**
@@ -461,14 +461,22 @@ export function SpaceDust() {
 export function SpacetimeGrid() {
   const meshRef = useRef<THREE.Mesh>(null);
   const mousePos = useRef({ x: 0, y: 0 });
+  const scrollY = useRef(0);
 
   useEffect(() => {
     const handlePointerMove = (e: MouseEvent) => {
       mousePos.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mousePos.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
+    const handleScroll = () => {
+      scrollY.current = window.scrollY;
+    };
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    return () => window.removeEventListener("pointermove", handlePointerMove);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const spacetimeShader = useMemo(() => {
@@ -476,6 +484,7 @@ export function SpacetimeGrid() {
       uniforms: {
         uTime: { value: 0 },
         uMouse: { value: new THREE.Vector2(0, 0) },
+        uScroll: { value: 0 },
         uColor1: { value: new THREE.Color(0x3fa9ff) }, // Electric blue
         uColor2: { value: new THREE.Color(0x5ccbff) }, // Nebula cyan
         uDeepColor: { value: new THREE.Color(0x0a1c3d) }, // Cosmic deep blue
@@ -483,6 +492,7 @@ export function SpacetimeGrid() {
       vertexShader: `
         uniform float uTime;
         uniform vec2 uMouse;
+        uniform float uScroll;
         varying vec2 vUv;
         varying float vElevation;
 
@@ -494,16 +504,16 @@ export function SpacetimeGrid() {
           float distToCenter = length(pos.xy);
 
           // Gravitational potential well (General Relativity curvature)
-          float well = -1.5 / (distToCenter * 0.7 + 0.85);
+          float well = -1.6 / (distToCenter * 0.6 + 0.85);
 
-          // Quantum ripple waves propagating outwards
-          float wave = sin(distToCenter * 3.2 - uTime * 2.2) * 0.16 * exp(-distToCenter * 0.22);
-          float crossWave = cos(pos.x * 2.0 + uTime * 0.9) * sin(pos.y * 2.0 + uTime * 0.9) * 0.08;
+          // Quantum ripple waves propagating outwards with time and scroll
+          float wave = sin(distToCenter * 2.8 - uTime * 2.0 + uScroll * 3.14) * 0.18 * exp(-distToCenter * 0.15);
+          float crossWave = cos(pos.x * 1.8 + uTime * 0.8) * sin(pos.y * 1.8 + uTime * 0.8) * 0.08;
 
           // Cursor spacetime warping (subtle gravitational attraction to mouse pointer)
-          vec2 mouseWorld = uMouse * 3.5;
+          vec2 mouseWorld = uMouse * 4.0;
           float distToMouse = length(pos.xy - mouseWorld);
-          float mouseDent = -0.5 * exp(-distToMouse * distToMouse * 0.6);
+          float mouseDent = -0.55 * exp(-distToMouse * distToMouse * 0.5);
 
           pos.z += well + wave + crossWave + mouseDent;
           vElevation = pos.z;
@@ -521,14 +531,14 @@ export function SpacetimeGrid() {
 
         void main() {
           // Anti-aliased primary grid lines
-          vec2 gridUv = abs(fract(vUv * 32.0 - 0.5) - 0.5) / fwidth(vUv * 32.0);
+          vec2 gridUv = abs(fract(vUv * 36.0 - 0.5) - 0.5) / fwidth(vUv * 36.0);
           float line = min(gridUv.x, gridUv.y);
           float gridAlpha = 1.0 - min(line, 1.0);
 
           // Fine secondary quantum grid lines
-          vec2 fineGridUv = abs(fract(vUv * 96.0 - 0.5) - 0.5) / fwidth(vUv * 96.0);
+          vec2 fineGridUv = abs(fract(vUv * 108.0 - 0.5) - 0.5) / fwidth(vUv * 108.0);
           float fineLine = min(fineGridUv.x, fineGridUv.y);
-          float fineGridAlpha = (1.0 - min(fineLine, 1.0)) * 0.3;
+          float fineGridAlpha = (1.0 - min(fineLine, 1.0)) * 0.35;
 
           float combinedGrid = max(gridAlpha, fineGridAlpha);
 
@@ -562,22 +572,66 @@ export function SpacetimeGrid() {
     spacetimeShader.uniforms.uTime.value = time;
 
     // Smoothly interpolate mouse uniform
-    spacetimeShader.uniforms.uMouse.value.x += (mousePos.current.x - spacetimeShader.uniforms.uMouse.value.x) * 0.06;
-    spacetimeShader.uniforms.uMouse.value.y += (mousePos.current.y - spacetimeShader.uniforms.uMouse.value.y) * 0.06;
+    spacetimeShader.uniforms.uMouse.value.x += (mousePos.current.x - spacetimeShader.uniforms.uMouse.value.x) * 0.05;
+    spacetimeShader.uniforms.uMouse.value.y += (mousePos.current.y - spacetimeShader.uniforms.uMouse.value.y) * 0.05;
+
+    // Smoothly interpolate scroll uniform
+    const maxScroll = typeof document !== 'undefined' ? (document.documentElement.scrollHeight - window.innerHeight || 1) : 1;
+    const targetScrollNorm = Math.min(Math.max(scrollY.current / maxScroll, 0), 1);
+    spacetimeShader.uniforms.uScroll.value += (targetScrollNorm - spacetimeShader.uniforms.uScroll.value) * 0.05;
 
     if (meshRef.current) {
-      meshRef.current.rotation.z = Math.sin(time * 0.06) * 0.04;
+      // Gentle reactive rotation with mouse and scroll
+      const targetRotY = mousePos.current.x * 0.1;
+      meshRef.current.rotation.y += (targetRotY - meshRef.current.rotation.y) * 0.04;
+      meshRef.current.rotation.z = Math.sin(time * 0.05) * 0.03;
+
+      // Subtle vertical shift with scroll
+      const targetPosY = -0.5 - targetScrollNorm * 1.2;
+      meshRef.current.position.y += (targetPosY - meshRef.current.position.y) * 0.04;
     }
   });
 
   return (
     <mesh
       ref={meshRef}
-      position={[0, -0.6, -0.5]}
+      position={[0, -0.5, -0.5]}
       rotation={[-Math.PI / 2.6, 0, 0]}
       material={spacetimeShader}
     >
-      <planeGeometry args={[15, 15, 64, 64]} />
+      <planeGeometry args={[22, 22, 64, 64]} />
     </mesh>
+  );
+}
+
+/**
+ * CosmicBackground — Global 3D Background Canvas
+ * Renders an interactive 3D spacetime curvature grid, space dust,
+ * shooting stars, and starfield that persists across the entire website.
+ */
+export function CosmicBackground() {
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      <Canvas
+        camera={{ position: [0, 2, 8], fov: 45 }}
+        dpr={1} // Capped at 1 for buttery fluidic 60-120fps performance on all devices
+        gl={{ antialias: false, powerPreference: "high-performance" }}
+      >
+        <color attach="background" args={["#050608"]} />
+        <ambientLight intensity={0.25} />
+
+        <group position={[0, 0, 0]}>
+          <SpacetimeGrid />
+          <SpaceDust />
+        </group>
+
+        <StarField />
+        <ShootingStar />
+
+        <pointLight position={[10, 10, 10]} intensity={0.3} />
+      </Canvas>
+      {/* Subtle atmospheric vignette at viewport edges */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(5,6,8,0.75)_100%)]" />
+    </div>
   );
 }
