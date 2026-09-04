@@ -6,6 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import gsap from "gsap";
 import { personalInfo } from "@/data/content";
 import {
+  SpacetimeGrid,
   StarField,
   ShootingStar,
   SpaceDust
@@ -60,6 +61,7 @@ export default function Hero() {
           <ambientLight intensity={0.2} />
           
           <group position={[0, 0, 0]}>
+            <SpacetimeGrid />
             <SpaceDust />
           </group>
           

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -450,5 +450,134 @@ export function SpaceDust() {
         fog={false}
       />
     </points>
+  );
+}
+
+/**
+ * SpacetimeGrid — 3D Spacetime Curvature & Quantum Wave Grid
+ * Renders an undulating 3D gravitational potential well and quantum wave fabric
+ * that smoothly reacts to cursor coordinates and time.
+ */
+export function SpacetimeGrid() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const mousePos = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handlePointerMove = (e: MouseEvent) => {
+      mousePos.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mousePos.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
+
+  const spacetimeShader = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uColor1: { value: new THREE.Color(0x3fa9ff) }, // Electric blue
+        uColor2: { value: new THREE.Color(0x5ccbff) }, // Nebula cyan
+        uDeepColor: { value: new THREE.Color(0x0a1c3d) }, // Cosmic deep blue
+      },
+      vertexShader: `
+        uniform float uTime;
+        uniform vec2 uMouse;
+        varying vec2 vUv;
+        varying float vElevation;
+
+        void main() {
+          vUv = uv;
+          vec3 pos = position;
+
+          // Distance from center of the grid
+          float distToCenter = length(pos.xy);
+
+          // Gravitational potential well (General Relativity curvature)
+          float well = -1.5 / (distToCenter * 0.7 + 0.85);
+
+          // Quantum ripple waves propagating outwards
+          float wave = sin(distToCenter * 3.2 - uTime * 2.2) * 0.16 * exp(-distToCenter * 0.22);
+          float crossWave = cos(pos.x * 2.0 + uTime * 0.9) * sin(pos.y * 2.0 + uTime * 0.9) * 0.08;
+
+          // Cursor spacetime warping (subtle gravitational attraction to mouse pointer)
+          vec2 mouseWorld = uMouse * 3.5;
+          float distToMouse = length(pos.xy - mouseWorld);
+          float mouseDent = -0.5 * exp(-distToMouse * distToMouse * 0.6);
+
+          pos.z += well + wave + crossWave + mouseDent;
+          vElevation = pos.z;
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        uniform vec3 uColor1;
+        uniform vec3 uColor2;
+        uniform vec3 uDeepColor;
+        varying vec2 vUv;
+        varying float vElevation;
+
+        void main() {
+          // Anti-aliased primary grid lines
+          vec2 gridUv = abs(fract(vUv * 32.0 - 0.5) - 0.5) / fwidth(vUv * 32.0);
+          float line = min(gridUv.x, gridUv.y);
+          float gridAlpha = 1.0 - min(line, 1.0);
+
+          // Fine secondary quantum grid lines
+          vec2 fineGridUv = abs(fract(vUv * 96.0 - 0.5) - 0.5) / fwidth(vUv * 96.0);
+          float fineLine = min(fineGridUv.x, fineGridUv.y);
+          float fineGridAlpha = (1.0 - min(fineLine, 1.0)) * 0.3;
+
+          float combinedGrid = max(gridAlpha, fineGridAlpha);
+
+          // Radial fade to seamlessly blend into space background
+          float distFromCenter = length(vUv - 0.5) * 2.0;
+          float edgeFade = smoothstep(1.0, 0.15, distFromCenter);
+
+          // Dynamic energy gradient based on curvature elevation
+          float colorBlend = smoothstep(-1.8, 0.2, vElevation);
+          vec3 gridColor = mix(uDeepColor, mix(uColor1, uColor2, sin(uTime * 1.5 + vElevation * 2.5) * 0.5 + 0.5), colorBlend);
+
+          // Ambient quantum glow pulse
+          float pulse = 0.85 + 0.15 * sin(uTime * 2.5 + vElevation * 3.0);
+
+          float finalAlpha = combinedGrid * edgeFade * pulse * 0.8;
+
+          if (finalAlpha < 0.01) discard;
+
+          gl_FragColor = vec4(gridColor * 1.25, finalAlpha);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+    });
+  }, []);
+
+  useFrame(({ clock }) => {
+    const time = clock.getElapsedTime();
+    spacetimeShader.uniforms.uTime.value = time;
+
+    // Smoothly interpolate mouse uniform
+    spacetimeShader.uniforms.uMouse.value.x += (mousePos.current.x - spacetimeShader.uniforms.uMouse.value.x) * 0.06;
+    spacetimeShader.uniforms.uMouse.value.y += (mousePos.current.y - spacetimeShader.uniforms.uMouse.value.y) * 0.06;
+
+    if (meshRef.current) {
+      meshRef.current.rotation.z = Math.sin(time * 0.06) * 0.04;
+    }
+  });
+
+  return (
+    <mesh
+      ref={meshRef}
+      position={[0, -0.6, -0.5]}
+      rotation={[-Math.PI / 2.6, 0, 0]}
+      material={spacetimeShader}
+    >
+      <planeGeometry args={[15, 15, 64, 64]} />
+    </mesh>
   );
 }
